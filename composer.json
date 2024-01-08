@@ -13,8 +13,7 @@
 
     "require": {
         "yiisoft/yii2": "2.*",
-        "ovidiupop/yii2-address": "@dev",
-        "ovidiupop/yii2-nordicgeo": "@dev"
+        "ovidiupop/yii2-address": "@dev"
     },
 
     "autoload": {
