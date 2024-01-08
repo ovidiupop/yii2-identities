@@ -62,10 +62,22 @@ class IdentitiesModule extends Module
         'addressFull' => ['addressCountry', 'addressFull'],
     ];
 
+    //set path for custom form of address
+    public $customFormAddress = '@backend/views/custom_forms/custom_address_form';
+
     public $controllerNamespace = 'ovidiupop\identities\controllers';
 
     public function init()
     {
         parent::init();
+        //register dependant modules
+        $config = require __DIR__ . '/config/main.php';
+        //use own customFormAddress
+        $config['modules']['address']['formCustom'] = $this->customFormAddress;
+
+        \Yii::$app->setModules($config['modules']);
+
+        //register else if there is something
+        \Yii::configure($this, $config);
     }
 }
