@@ -9,75 +9,133 @@ namespace ovidiupop\identities;
 
 use yii\base\Module;
 
+/**
+ * Module for handling identities.
+ *
+ * @property string $addressFormCustom Path to the custom form for the address module.
+ * @property string $columns Path to columns.php defining columns for GridView.
+ * @property string $gridConfig Path to grid_config.php defining order and visibility for columns.
+ * @property string $gridConfigPersons Path to grid_config_persons.php for grid configuration for persons.
+ * @property string $gridConfigCompanies Path to grid_config_companies.php for grid configuration for companies.
+ * @property string $form Path to the custom index for identities/identity/_form.
+ * @property string $index Path to the custom index for identities/identity/index.
+ * @property string $view Path to the custom view for identities/identity/view.
+ *
+ */
 class IdentitiesModule extends Module
 {
+    public $controllerNamespace = 'ovidiupop\identities\controllers';
+
     /**
      * Path to columns.php.
-     * Using configuration for module, you will be able to use your own configuration for columns
-     * for example if you will use kartik/grid
+     * Here are definited columns for GridView.
      *
      * @var string
      */
-    public $columnsFile = '@ovidiupop/identities/config/columns.php';
+    public $columns = '@ovidiupop/identities/config/columns.php';
 
     /**
-     * Which groups will be displayed in index. These groups can be configured in $groupsAttributes;
-     * If you set $indexGroupsColumns = false, $visibleColumns will be used instead
+     * Path to grid_config.php.
+     * Here you will define the order and visibility for columns used.
      *
-     * @var array|bool[]
+     * @var string
      */
-    public $indexGroupsColumns = ['identityData', 'address'];
-
+    public $gridConfig = '@ovidiupop/identities/config/grid_config.php';
 
     /**
-     * If $indexGroupsColumns is set as false, in index grid will be displayed columns configured here;
-     * Useful when you need to administrate a limited and very specific columns
+     * Path to grid_config_persons.php.
+     * Here, you can define the order and visibility of columns used by the grid for persons.
      *
-     * @var string[]
+     * @var string
      */
-    public $visibleColumns = ['identityDataIdentityTypeId', 'identityDataIdentifier', 'identityDataName'];
-
+    public $gridConfigPersons = '@ovidiupop/identities/config/grid_config_persons.php';
 
     /**
-     * There are two models: address and identityData. For each of them you can set the visible (include) and order of attributes
-     * in your grid.
+     * Path to grid_config_persons.php.
+     * Here, you can define the order and visibility of columns used by the grid for companies.
      *
-     * 'addressFull' is not a model, but a predefined group which will include two columns for address:
-     *      1. country
-     *      2. string with full address in this form: street, house_number, city, region, postal_code.
-     *         Each of this attribute will not be included if they are not set.
-     *         Filtering will be applied to all attributes
-     *
-     * @var array[]
+     * @var string
      */
-    public $groupsAttributes = [
-        'address' => ['addressCountry', 'addressRegion', 'addressCity', 'addressStreet', 'addressHouseNumber',
-            'addressPostalCode', 'addressApartmentNumber'],
+    public $gridConfigCompanies = '@ovidiupop/identities/config/grid_config_companies.php';
 
-        'identityData' => ['identityDataIdentityTypeId', 'identityDataName', 'identityDataIdentifier', 'identityDataPersonIdentifier',
-            'identityDataRegistrationNumber', 'identityDataVatNumber', 'identityDataVatRate', 'identityDataPhone',
-            'identityDataEmail', 'identityDataAdditionalInfo', 'identityDataContactPerson', 'identityDataIndustryId',
-            'identityDataRegistrationDate'],
+    /**
+     * Path to the custom form for the address module.
+     *
+     * @var string
+     */
+    public $addressFormCustom;
 
-        'addressFull' => ['addressCountry', 'addressFull'],
-    ];
+    /**
+     * Path to the custom index for identities/identity/index.
+     * @var
+     */
+    public $index;
 
-    //set path for custom form of address
-    public $customFormAddress = '@backend/views/custom_forms/custom_address_form';
+    /**
+     * Path to the custom index for identities/identity/_form.
+     * @var
+     */
+    public $form;
 
-    public $controllerNamespace = 'ovidiupop\identities\controllers';
+    /**
+     * Path to the custom index for identities/identity/_form.
+     * @var
+     */
+    public $formPersonCompany = '@ovidiupop/identities/config/form_person_company';
 
+    /**
+     * Path to the custom index for identities/identity/view.
+     * @var
+     */
+    public $view;
+
+    /**
+     * Retrieves and returns an array of columns based on the specified search model, data provider,
+     * and optionally a custom grid order configuration.
+     *
+     * @param mixed $searchModel The search model for the grid.
+     * @param mixed $dataProvider The data provider for the grid.
+     * @param mixed|false $gridConfig Custom grid configuration file path (optional).
+     *  If not provided, the default configuration from the component will be used.
+     * @return array An array of columns based on the specified criteria.
+     */
+    public function getColumnsForGrid($searchModel, $dataProvider, $gridConfig=false)
+    {
+        $gridConfig = $gridConfig ?:  $this->gridConfig;
+        $gridConfig = require(\Yii::getAlias($gridConfig));
+        $columnsConfig = require(\Yii::getAlias($this->columns));
+
+        $columns = [];
+        $visibleColumns = $gridConfig['visible'];
+
+        foreach ($visibleColumns as $column){
+            if(array_key_exists($column, $columnsConfig)){
+                $columns[] = $columnsConfig[$column];
+            }
+        }
+
+        $columns = array_filter($columns);
+        return $columns;
+    }
+
+    /**
+     * Initializes the module, registering dependent modules and configuring necessary components.
+     * It sets up the module using configuration from the main.php file and allows customization
+     * by incorporating a custom form for the address module if specified.
+     */
     public function init()
     {
         parent::init();
         //register dependant modules
         $config = require __DIR__ . '/config/main.php';
         //use own customFormAddress
-        $config['modules']['address']['formCustom'] = $this->customFormAddress;
+        $config['modules']['address']['formCustom'] = $this->addressFormCustom;
 
         \Yii::$app->setModules($config['modules']);
+        \Yii::$app->setComponents($config['components']);
 
         //register else if there is something
         \Yii::configure($this, $config);
     }
+
 }

@@ -29,6 +29,7 @@ use yii\helpers\ArrayHelper;
  * @property int|null $industry_id
  * @property string|null $registration_date
  *
+ *
  * @property IdentityType $identityType
  * @property PersonIdentifierType $personIdentifierType
  * @property Industry $industry
@@ -49,6 +50,60 @@ class IdentityData extends \yii\db\ActiveRecord
 
     const PERSON = 1;
     const COMPANY = 2;
+
+    private $entityTypeNames = [];
+
+
+    private $personFields =   ['name', 'phone', 'email', 'additional_info', 'person_identifier_type_id', 'person_identifier'];
+    private $companyFields =  ['name', 'phone', 'email', 'additional_info', 'registration_number', 'vat_number', 'vat_rate', 'industry_id'];
+
+    public function getFieldsForEntity()
+    {
+        if($this->identity_type_id == self::PERSON){
+            return $this->personFields;
+        }
+        if($this->identity_type_id == self::COMPANY){
+            return $this->companyFields;
+        }
+        return [];
+    }
+
+    public function getPersonField()
+    {
+        return $this->personFields;
+    }
+
+    public function getCompanyFields()
+    {
+        return $this->companyFields;
+    }
+
+    public function getEntityTypeNames()
+    {
+        return $this->entityTypeNames;
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->setEntityTypeNames();
+    }
+
+    public function setEntityTypeNames()
+    {
+        $this->entityTypeNames = [
+            self::PERSON => Yii::t('identity', 'Person'),
+            self::COMPANY => Yii::t('identity', 'Company'),
+        ];
+    }
+
+    public function entityTypeName($type)
+    {
+        if(array_key_exists($type, $this->entityTypeNames)){
+            return $this->entityTypeNames[$type];
+        }
+        return Yii::t('identity', 'Undefined');
+    }
 
     public function rules()
     {
@@ -71,25 +126,49 @@ class IdentityData extends \yii\db\ActiveRecord
         ];
     }
 
+
+    /**
+     * @return string
+     */
+    public function getLabelForName()
+    {
+        if($this->isNewRecord){
+            $this->identity_type_id = Yii::$app->getRequest()->get('type', null);
+        }
+
+        switch ($this->identity_type_id){
+            case self::PERSON;
+                $labelForName = Yii::t('identities', 'First and Last Name');
+                break;
+            case self::COMPANY;
+                $labelForName = Yii::t('identities', 'Company Name');
+                break;
+            default:
+                $labelForName = Yii::t('identities', 'Name');
+        }
+        return $labelForName;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
+
         return [
+            'name' => $this->getLabelForName(),
             'id' => Yii::t('identities', 'ID'),
             'identity_type_id' => Yii::t('identities', 'Entity'),
-            'person_identifier_type_id' => Yii::t('identities', 'Person Identifier Type ID'),
+            'person_identifier_type_id' => Yii::t('identities', 'Person Identifier Type'),
             'person_identifier' => Yii::t('identities', 'Person Identifier'),
             'phone' => Yii::t('identities', 'Phone'),
             'email' => Yii::t('identities', 'Email'),
             'additional_info' => Yii::t('identities', 'Additional Info'),
-            'name' => Yii::t('identities', 'Firstname Lastname / Company Name'),
             'registration_number' => Yii::t('identities', 'Registration Number'),
             'vat_number' => Yii::t('identities', 'Vat Number'),
             'vat_rate' => Yii::t('identities', 'Vat Rate'),
             'contact_person' => Yii::t('identities', 'Contact Person'),
-            'industry_id' => Yii::t('identities', 'Industry ID'),
+            'industry_id' => Yii::t('identities', 'Industry'),
             'registration_date' => Yii::t('identities', 'Registration Date'),
         ];
     }
@@ -158,5 +237,7 @@ class IdentityData extends \yii\db\ActiveRecord
     {
         return $this->identities[0];
     }
+
+
 
 }

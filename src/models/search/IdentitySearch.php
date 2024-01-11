@@ -19,6 +19,7 @@ use yii\helpers\Inflector;
 class IdentitySearch extends Identity
 {
     //identity_data
+    public $identityDataId;
     public $identityDataIdentityTypeId;
     public $identityDataName;
     public $identityDataIdentifier;
@@ -48,8 +49,8 @@ class IdentitySearch extends Identity
 
     public $address_fields_exact = ['country'];
     public $address_fields_like = ['region', 'city', 'street', 'house_number', 'apartment_number', 'postal_code'];
-    public $identity_data_fields_exact = ['identity_type_id', 'person_identifier'];
-    public $identity_data_fields_like = ['name', 'registration_number', 'additional_info', 'vat_rate', 'vat_number', 'contact_person', 'phone', 'email', 'industry_id'];
+    public $identity_data_fields_exact = ['id', 'identity_type_id'];
+    public $identity_data_fields_like = ['name', 'registration_number', 'person_identifier', 'additional_info', 'vat_rate', 'vat_number', 'contact_person', 'phone', 'email', 'industry_id'];
 
     /**
      * @inheritdoc
@@ -162,6 +163,7 @@ class IdentitySearch extends Identity
 
         //exact
         $query->andFilterWhere([
+            'identity.id'=> $this->id,
             'address.country' => $this->addressCountry
         ]);
 
@@ -184,7 +186,7 @@ class IdentitySearch extends Identity
     {
         //filtering for identity type
         $query->andFilterWhere([
-            'id' => $this->id,
+            'identity.id' => $this->id,
         ]);
 
         foreach ($this->models as $class) {
@@ -204,7 +206,6 @@ class IdentitySearch extends Identity
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)

@@ -5,27 +5,29 @@
  * Filename: create.php
  */
 
-/** @var \ovidiupop\identities\models\IdentityData $identityData */
-
-/** @var  \ovidiupop\address\models\Address $addressModel */
-
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model ovidiupop\identities\models\Identity */
+/** @var $this yii\web\View */
+/** @var $model ovidiupop\identities\models\Identity */
+/** @var $identityData \ovidiupop\identities\models\IdentityData */
+/** @var $addressModel \ovidiupop\address\models\Address */
+/** @var $index string */
+/** @var $form string */
+/** @var $name string */
+/** @var $type string */
 
-$this->title = Yii::t('identities', 'Create Identity');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('identities', 'Identities'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('identities', 'Add');
+$this->params['breadcrumbs'][] = ['label' => $name, 'url' => $index];
 ?>
 <div class="identity-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render($form, [
         'model' => $model,
         'addressModel' => $addressModel,
-        'identityData' => $identityData
+        'identityData' => $identityData,
+        'type' => $type
     ]) ?>
 
 </div>

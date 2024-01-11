@@ -14,7 +14,7 @@ return [
     ],
     'components' => [
         'industry' => [
-            'class' => 'common\components\industry\IndustryComponent',
+            'class' => 'ovidiupop\identities\components\industry\IndustryComponent',
         ],
     ],
 ];

@@ -12,11 +12,11 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel ovidiupop\identities\models\search\IdentitySearch */
 /* @var $searchIdentityData ovidiupop\identities\models\search\IdentityDataSearch */
-
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('identities', 'Identities');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="identity-index">
 
@@ -28,30 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
 
     <?php
-    $module = Yii::$app->getModule('identities');
-    $columns = [];
-    $columnsConfig = require(Yii::getAlias($module->columnsFile));
-
-    if ($module->indexGroupsColumns && is_array($module->indexGroupsColumns)) {
-        foreach ($module->indexGroupsColumns as $groupColumn) {
-            foreach ($module->groupsAttributes[$groupColumn] as $attribute) {
-                $columns[] = $columnsConfig[$attribute] ?? null;
-            }
-        }
-    } else {
-        $visibleColumns = $module->visibleColumns;
-        foreach ($visibleColumns as $key) {
-            $columns[] = $columnsConfig[$key] ?? null;
-        }
-    }
-
-    $columns = array_filter($columns);
+        //for original index columns must stay here, after Pjax begin.
+        $columns = Yii::$app->getModule('identities')->getColumnsForGrid($searchModel, $dataProvider);
+        $columns = array_merge($columns, [['class' => 'yii\grid\ActionColumn']]);
     ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => array_merge($columns, [['class' => 'yii\grid\ActionColumn']]),
+        'columns' => $columns
     ]); ?>
     <?php Pjax::end(); ?>
 
