@@ -6,7 +6,7 @@
  */
 
 return [
-    'visible'=> [
+    'visible' => [
         'id',
         'identityDataIdentityTypeId',
         'identityDataName',
@@ -21,7 +21,7 @@ return [
         'identityDataIndustryId',
     ],
 
-    'hidden'=> [
+    'hidden' => [
         'addressRegion',
         'addressCity',
         'addressStreet',

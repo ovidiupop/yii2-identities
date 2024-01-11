@@ -8,8 +8,8 @@
 namespace ovidiupop\identities\interfaces;
 
 use ovidiupop\identities\models\Identity;
-use ovidiupop\identities\models\IdentityData;
 use yii\filters\VerbFilter;
+use yii\helpers\Inflector;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -18,7 +18,8 @@ trait IdentitiesTrait
     /**
      * @return array[]
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -30,14 +31,44 @@ trait IdentitiesTrait
     }
 
     /**
+     * @return string
+     */
+    protected function generateControllerId(): string
+    {
+        $controllerClass = static::class;
+        $controllerName = str_replace('Controller', '', substr($controllerClass, strrpos($controllerClass, '\\') + 1));
+        return Inflector::camel2id($controllerName, '-');
+    }
+
+    /**
+     * @return string
+     */
+    public function getControllerName(): string
+    {
+        return $this->generateControllerId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getGridData()
+    {
+        if (property_exists($this, 'gridData') && isset($this->gridData) && is_array($this->gridData)) {
+            return $this->gridData;
+        }
+        return [];
+    }
+
+    /**
      * @return Response
      */
     public function actionIndex()
     {
+        $c = $this->getControllerName();
         return $this->redirect(['/identities/identity/index',
             'controller' => $this->getControllerName(),
-            'type' => $this->getType(),
-            'grid_data'=>$this->gridData()
+            'type' => $this->type,
+            'grid_data' => $this->gridData
         ]);
     }
 
@@ -48,7 +79,7 @@ trait IdentitiesTrait
     {
         return $this->redirect(['/identities/identity/create',
             'controller' => $this->getControllerName(),
-            'type' => $this->getType(),
+            'type' => $this->type,
         ]);
     }
 
@@ -62,7 +93,7 @@ trait IdentitiesTrait
         return $this->redirect(['/identities/identity/update',
             'id' => $id,
             'controller' => $this->getControllerName(),
-            'type' => $this->getType(),
+            'type' => $this->type,
         ]);
     }
 
@@ -76,7 +107,7 @@ trait IdentitiesTrait
         return $this->redirect(['/identities/identity/view',
             'id' => $id,
             'controller' => $this->getControllerName(),
-            'type' => $this->getType(),
+            'type' => $this->type,
         ]);
     }
 

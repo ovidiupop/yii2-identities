@@ -163,7 +163,7 @@ class IdentitySearch extends Identity
 
         //exact
         $query->andFilterWhere([
-            'identity.id'=> $this->id,
+            'identity.id' => $this->id,
             'address.country' => $this->addressCountry
         ]);
 

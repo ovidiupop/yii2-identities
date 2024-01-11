@@ -6,8 +6,8 @@
  */
 
 return [
-    'modules'=>[
-        'address'=>[
+    'modules' => [
+        'address' => [
             'class' => 'ovidiupop\address\AddressModule',
             'formCustom' => '@backend/views/companies/custom_address_form',
         ],

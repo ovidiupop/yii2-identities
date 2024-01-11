@@ -99,17 +99,17 @@ class IdentitiesModule extends Module
      *  If not provided, the default configuration from the component will be used.
      * @return array An array of columns based on the specified criteria.
      */
-    public function getColumnsForGrid($searchModel, $dataProvider, $gridConfig=false)
+    public function getColumnsForGrid($searchModel, $dataProvider, $gridConfig = false)
     {
-        $gridConfig = $gridConfig ?:  $this->gridConfig;
+        $gridConfig = $gridConfig ?: $this->gridConfig;
         $gridConfig = require(\Yii::getAlias($gridConfig));
         $columnsConfig = require(\Yii::getAlias($this->columns));
 
         $columns = [];
         $visibleColumns = $gridConfig['visible'];
 
-        foreach ($visibleColumns as $column){
-            if(array_key_exists($column, $columnsConfig)){
+        foreach ($visibleColumns as $column) {
+            if (array_key_exists($column, $columnsConfig)) {
                 $columns[] = $columnsConfig[$column];
             }
         }

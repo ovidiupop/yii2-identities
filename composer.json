@@ -1,24 +1,27 @@
 {
-    "name": "ovidiupop/yii2-identities",
-    "description": "The \"identities\" module is designed to manage and manipulate information related to identities, which can be either individuals or companies. It provides functionalities such as handling data associated with these entities, displaying, and manipulating them.",
-    "type": "yii2-extension",
-    "keywords": ["yii2","extension","address", "php"],
-    "license": "GPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Ovidiu Pop",
-            "email": "ovidiupop70@gmail.com"
-        }
-    ],
-
-    "require": {
-        "yiisoft/yii2": "2.*",
-        "ovidiupop/yii2-address": "@dev"
-    },
-
-    "autoload": {
-        "psr-4": {
-            "ovidiupop\\identities\\": "src/"
-        }
+  "name": "ovidiupop/yii2-identities",
+  "description": "The \"identities\" module is designed to manage and manipulate information related to identities, which can be either individuals or companies. It provides functionalities such as handling data associated with these entities, displaying, and manipulating them.",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "address",
+    "php"
+  ],
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Ovidiu Pop",
+      "email": "ovidiupop70@gmail.com"
     }
+  ],
+  "require": {
+    "yiisoft/yii2": "2.*",
+    "ovidiupop/yii2-address": "@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "ovidiupop\\identities\\": "src/"
+    }
+  }
 }

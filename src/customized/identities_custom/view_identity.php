@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->identityData->name];
 $this->title = $title;
 ?>
 
-<?= $this->render('@backend/identities_custom/crud', ['controller' => $controller?? 'identities/identity', 'id' => $model->id, 'confirm' => 'Do you delete?']); ?>
+<?= $this->render('@backend/identities_custom/crud', ['controller' => $controller ?? 'identities/identity', 'id' => $model->id, 'confirm' => 'Do you delete?']); ?>
 
 <div class="identity-view">
     <?= DetailView::widget([

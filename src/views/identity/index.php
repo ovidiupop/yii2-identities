@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
 
     <?php
-        //for original index columns must stay here, after Pjax begin.
-        $columns = Yii::$app->getModule('identities')->getColumnsForGrid($searchModel, $dataProvider);
-        $columns = array_merge($columns, [['class' => 'yii\grid\ActionColumn']]);
+    //for original index columns must stay here, after Pjax begin.
+    $columns = Yii::$app->getModule('identities')->getColumnsForGrid($searchModel, $dataProvider);
+    $columns = array_merge($columns, [['class' => 'yii\grid\ActionColumn']]);
     ?>
 
     <?= GridView::widget([

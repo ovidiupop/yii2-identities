@@ -53,10 +53,10 @@ $type = $model->isNewRecord ? $type : $model->identityData->identity_type_id;
 
                 <div class="col-6">
                     <section class="person-data">
-                            <?= $form->field($identityData, 'person_identifier')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($identityData, 'person_identifier')->textInput(['maxlength' => true]) ?>
                     </section>
                     <section class="company-data" style="display: none;">
-                            <?= $form->field($identityData, 'registration_number')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($identityData, 'registration_number')->textInput(['maxlength' => true]) ?>
                     </section>
                 </div>
 
@@ -88,7 +88,7 @@ $type = $model->isNewRecord ? $type : $model->identityData->identity_type_id;
 
                 <div class="col-6">
                     <section class="common-data">
-                            <?= $form->field($identityData, 'phone')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($identityData, 'phone')->textInput(['maxlength' => true]) ?>
                     </section>
                 </div>
 
@@ -112,16 +112,16 @@ $type = $model->isNewRecord ? $type : $model->identityData->identity_type_id;
                 <div class="col-12">
                     <?= Yii::$app->getModule('address')->addressComponent->formInclude($addressModel, $form, 'custom') ?>
                 </div>
+            </div>
+
         </div>
 
+        <div class="form-group">
+            <?= Html::submitButton(Yii::t('identities', 'Save'), ['class' => 'btn btn-success']) ?>
+        </div>
+
+        <?= $form->field($identityData, 'person_identifier_type_id')->hiddenInput(['class' => 'person_identifier_type_id'])->label(false) ?>
+
+        <?php ActiveForm::end(); ?>
+
     </div>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('identities', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?= $form->field($identityData, 'person_identifier_type_id')->hiddenInput(['class' => 'person_identifier_type_id'])->label(false) ?>
-
-    <?php ActiveForm::end(); ?>
-
-</div>

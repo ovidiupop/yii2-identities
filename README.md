@@ -1,12 +1,16 @@
-The "identities" module is designed for managing and manipulating information related to both individuals and companies. It provides functionalities for handling associated data, displaying, and performing manipulations.
+The "identities" module is designed for managing and manipulating information related to both individuals and companies.
+It provides functionalities for handling associated data, displaying, and performing manipulations.
 
 **Installation**
 
 The recommended installation method is using Composer.
+
 ````
 composer require --prefer-dist ovidiupop/yii2-identities "@dev"
 ````
+
 Or, add the following line to your composer.json file:
+
 ````
 "ovidiupop\yii2-identities": "@dev"
 ````
@@ -14,7 +18,9 @@ Or, add the following line to your composer.json file:
 **Configuration**
 
 Run the migration located in the migrations folder to create the necessary tables.
+
 In the config/main.php file, add:
+
 ````
 'modules' => [
     'identities' => [
@@ -25,7 +31,8 @@ In the config/main.php file, add:
 
 **Usage**
 
-To manage all entities on a single page without customization, visit /identities/identity/index. Here, you can add, update, and delete both individual and company identities.
+To manage all entities on a single page without customization, visit /identities/identity/index. Here, you can add,
+update, and delete both individual and company identities.
 
 **Customization**
 
@@ -34,6 +41,7 @@ The module utilizes standard Yii2 components (GridView and DetailView), and the 
 For customization, the following configurations are available:
 
 Example for full customization:
+
 ```
 'modules' => [
     'identities' => [
@@ -51,6 +59,8 @@ Example for full customization:
         ]
     ..................
 ```
+Of course, all paths are just examples, but you can use any paths for your custom files.  
+To begin customization, copy the module's files (or from customized folder) to your project folder and then personalize them as needed.
 
 ***Customization details:***
 
@@ -63,8 +73,6 @@ Example for full customization:
     gridConfig - the file where the order and visibility of grid columns are set.
     gridConfigPersons - when displaying only entities of type Person, set the order and visibility of grid columns.
     gridConfigCompanies - when displaying only entities of type Company, set the order and visibility of grid columns.
-    To begin customization, copy the module's files to your project folder and then personalize them as needed.
-
 
 In the index_identity.php file, obtain the columns for the grid as follows:
 
@@ -76,55 +84,38 @@ $columns = Yii::$app->getModule('identities')->getColumnsForGrid($searchModel, $
 $columns = Yii::$app->getModule('identities')->getColumnsForGrid($searchModel, $dataProvider, $columnsForType);
 ````
 
+To manage specialized identities separately, create a controller for each type (persons and companies) in your project.
+Controllers should use the IdentitiesTrait. A complete controller should look like this:
 
-To manage specialized identities separately, create a controller for each type (persons and companies) in your project. Controllers should implement the IdentitiesInterface and use the IdentitiesTrait. A complete controller should look like this:
 ````
-<?php
-namespace backend\controllers;
+    <?php
+    namespace backend\controllers;
 
-use ovidiupop\identities\interfaces\IdentitiesInterface;
-use ovidiupop\identities\interfaces\IdentitiesTrait;
-use ovidiupop\identities\models\IdentityData;
-use yii\web\Controller;
+    use ovidiupop\identities\interfaces\IdentitiesTrait;
+    use ovidiupop\identities\models\IdentityData;
+    use yii\web\Controller;
 
-
-class PersonsController extends Controller implements IdentitiesInterface
-{
-    use IdentitiesTrait;
-
-    /**
-     * @return string
-     */
-    public function getControllerName(): string
+    class PersonsController extends Controller
     {
-        return 'persons'; // the controller name in lowercase
-    }
+        use IdentitiesTrait;
 
-    /**
-     * The type of managed entity 
-     * (IdentityData::PERSON = 1, IdentityData::COMPANY = 2)
-     *
-     * @return int
-     */
-    public function getType(): int
-    {
-        return IdentityData::PERSON; 
-    }
+        /**
+        * REQUIRED: The is the type of managed entity
+        * (IdentityData::PERSON = 1, IdentityData::COMPANY = 2)
+        * @var int
+        */
+        public $type = IdentityData::PERSON;
 
-    /**
-     * This function allows sending parameters to the index file for customizing the grid based on preferences.
-     * in index.php you can use like this: 'panelHeadingIcon' => $config['icon'] ?? ICON_IDENTITY,
-     *
-     * @return array
-     */
-    public function gridData(): array
-    {
-        return [
-            'icon' => ICON_CUSTOMER,
-        ];
+        /**
+        * Optional: allows sending parameters to the index file for customizing the grid based on preferences.
+        * * in index.php you can use like this: 'panelHeadingIcon' => $config['icon'] ?? ICON_IDENTITY,
+        *
+        * @var array
+        */
+        public $gridData = ['icon'=>ICON_GALLERY];
     }
-}
 ````
-
 
 For message translation, use the 'identities' convention [Yii::t('identities', message)].
+
+That's all! Enjoy! 

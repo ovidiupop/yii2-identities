@@ -54,15 +54,15 @@ class IdentityData extends \yii\db\ActiveRecord
     private $entityTypeNames = [];
 
 
-    private $personFields =   ['name', 'phone', 'email', 'additional_info', 'person_identifier_type_id', 'person_identifier'];
-    private $companyFields =  ['name', 'phone', 'email', 'additional_info', 'registration_number', 'vat_number', 'vat_rate', 'industry_id'];
+    private $personFields = ['name', 'phone', 'email', 'additional_info', 'person_identifier_type_id', 'person_identifier'];
+    private $companyFields = ['name', 'phone', 'email', 'additional_info', 'registration_number', 'vat_number', 'vat_rate', 'industry_id'];
 
     public function getFieldsForEntity()
     {
-        if($this->identity_type_id == self::PERSON){
+        if ($this->identity_type_id == self::PERSON) {
             return $this->personFields;
         }
-        if($this->identity_type_id == self::COMPANY){
+        if ($this->identity_type_id == self::COMPANY) {
             return $this->companyFields;
         }
         return [];
@@ -99,7 +99,7 @@ class IdentityData extends \yii\db\ActiveRecord
 
     public function entityTypeName($type)
     {
-        if(array_key_exists($type, $this->entityTypeNames)){
+        if (array_key_exists($type, $this->entityTypeNames)) {
             return $this->entityTypeNames[$type];
         }
         return Yii::t('identity', 'Undefined');
@@ -132,11 +132,11 @@ class IdentityData extends \yii\db\ActiveRecord
      */
     public function getLabelForName()
     {
-        if($this->isNewRecord){
+        if ($this->isNewRecord) {
             $this->identity_type_id = Yii::$app->getRequest()->get('type', null);
         }
 
-        switch ($this->identity_type_id){
+        switch ($this->identity_type_id) {
             case self::PERSON;
                 $labelForName = Yii::t('identities', 'First and Last Name');
                 break;
@@ -237,7 +237,6 @@ class IdentityData extends \yii\db\ActiveRecord
     {
         return $this->identities[0];
     }
-
 
 
 }

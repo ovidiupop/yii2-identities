@@ -4,6 +4,7 @@
  * Date: 1/4/24
  * Filename: IndustryComponent.php
  */
+
 namespace ovidiupop\identities\components\industry;
 
 use yii\base\Component;
@@ -75,7 +76,7 @@ class IndustryComponent extends Component
 
     public function getIndustryByIndex($index)
     {
-        if(array_key_exists($index, $this->industries)){
+        if (array_key_exists($index, $this->industries)) {
             return $this->industries[$index];
         }
         return Yii::t('identities', 'Industry does not exists!');
